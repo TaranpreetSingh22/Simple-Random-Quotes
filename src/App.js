@@ -1,4 +1,5 @@
 import './App.css';
+import axios from 'axios';
 import React,{useState,useEffect} from 'react';
 
 function App(props) {
@@ -6,11 +7,15 @@ function App(props) {
   const [loading,setLoading]=useState(true);
   const [visible,setVisible]=useState(false);
   const [qimage,setQimage]=useState([]);
-  var iurl='https://randomquotes-q8g7.onrender.com/images';
+  const [initial,setInitial]=useState(true);
+  var iurl;
  
  function nextAll() {
   iurl=qimage[0].next_page;
-  fetchimage();
+  axios.post('/next_page',{nextPage:iurl})
+  .then(res=>res.data)
+  .then((res)=>{setQimage([res])})
+  .catch(err=>console.log(err));
   fetchdata();
  }
  
@@ -31,18 +36,32 @@ function App(props) {
  
  async function fetchimage() {
 
-  try {
-    const response= await fetch(iurl);
-    const res=await response.json()
+  if(initial===true){
+    try {
+      const response= await fetch('https://randomquotes-q8g7.onrender.com/images');
+      const res=await response.json()
 
-    if (response.ok){
-      setQimage([res]);
+      if (response.ok){
+        setQimage([res]);
+        setInitial(false)
+      }
+    } catch (error) {
+      console.log(error)
     }
-  } catch (error) {
-    console.log(error)
-  }
-  
-  }
+  } else if(initial===false){
+    try {
+      const response=await fetch('https://randomquotes-q8g7.onrender.com/next_page');
+      const res=await response.json()
+
+      if (response.ok){
+        setQimage([res]);
+        setInitial(false);
+      }} catch (error) {
+        console.log(error)
+      }
+    } 
+  }      
+
 
   function author() {
     setVisible(true);
