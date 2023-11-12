@@ -6,7 +6,7 @@ function App(props) {
   const [loading,setLoading]=useState(true);
   const [visible,setVisible]=useState(false);
   const [qimage,setQimage]=useState([]);
-  var iurl='https://RandomQuotes.onrender.com/images';
+  var iurl='https://randomquotes-q8g7.onrender.com/images';
  
  function nextAll() {
   iurl=qimage[0].next_page;
@@ -17,7 +17,7 @@ function App(props) {
  async function fetchdata(){
 
   try {
-    const response= await fetch("https://RandomQuotes.onrender.com/quotes");
+    const response= await fetch("https://randomquotes-q8g7.onrender.com/quotes");
     const res=await response.json()
     
     if(response.ok){
